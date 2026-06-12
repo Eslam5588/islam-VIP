@@ -9,70 +9,152 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa; padding-bottom: 70px; }
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: #1f2937; color: white; display: flex; justify-content: space-around; padding: 10px 0; z-index: 1000; }
-        .nav-item { text-align: center; flex: 1; cursor: pointer; color: #9ca3af; transition: 0.3s; }
-        .nav-item.active { color: #f59e0b; font-weight: bold; }
-        .nav-item i { font-size: 1.5rem; display: block; margin-bottom: 2px; }
-        .screen { display: none; } .screen.active { display: block; }
-        #miniCart { position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%); width: 100%; max-width: 28rem; background: #fff; border-top: 2px solid #f59e0b; box-shadow: 0 -4px 6px rgba(0,0,0,0.1); z-index: 999; padding: 10px; display: none; border-radius: 15px 15px 0 0; }
-        .chat-bubble-client { background-color: #d1fae5; border-radius: 10px 10px 0 10px; padding: 8px; margin-bottom: 8px; text-align: right; width: 80%; margin-right: auto; }
-        .chat-bubble-admin { background-color: #f3f4f6; border-radius: 10px 10px 10px 0; padding: 8px; margin-bottom: 8px; text-align: right; width: 80%; }
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: #1f2937; color: white; display: flex; justify-content: space-around; padding: 10px 0; z-index: 1000; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); }
+        .nav-item { text-align: center; flex: 1; cursor: pointer; color: #9ca3af; transition: all 0.3s ease; }
+        .nav-item.active { color: #f59e0b; font-weight: bold; transform: translateY(-2px); }
+        .nav-item i { font-size: 1.5rem; display: block; margin-bottom: 4px; }
+        .screen { display: none; opacity: 0; transition: opacity 0.3s ease; } 
+        .screen.active { display: block; opacity: 1; }
+        #miniCart { position: fixed; bottom: 70px; left: 50%; transform: translateX(-50%); width: 95%; max-width: 28rem; background: #fff; border: 2px solid #f59e0b; box-shadow: 0 -4px 15px rgba(0,0,0,0.15); z-index: 999; padding: 12px; display: none; border-radius: 15px; }
+        .chat-bubble-client { background-color: #d1fae5; border-radius: 15px 15px 0 15px; padding: 10px; margin-bottom: 8px; text-align: right; width: 85%; margin-right: auto; shadow-sm; }
+        .chat-bubble-admin { background-color: #f3f4f6; border-radius: 15px 15px 15px 0; padding: 10px; margin-bottom: 8px; text-align: right; width: 85%; shadow-sm; }
+        /* أنيميشن إشعار الإضافة (Toast) */
+        .toast-notification { position: fixed; top: 80px; left: 50%; transform: translateX(-50%); background: #1f2937; color: #fff; px: 16px; py: 8px; border-radius: 99px; z-index: 10000; font-weight: bold; font-size: 14px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); transition: all 0.4s ease; opacity: 0; pointer-events: none; }
+        .toast-notification.show { opacity: 1; transform: translate(-50%, 10px); }
     </style>
 </head>
 <body>
 
-    <div class="bg-amber-500 text-gray-900 text-center p-4 shadow-md sticky top-0 z-50"><h1 class="text-xl font-black"><i class="fa-solid fa-gear"></i> أبو إسلام لقطع غيار التوك توك</h1></div>
-    <div id="loadingScreen" class="screen active p-6 text-center mt-20"><i class="fa-solid fa-spinner fa-spin text-5xl text-amber-500 mb-4"></i><p class="font-bold text-gray-600">جاري الاتصال بالمحل...</p></div>
+    <div class="bg-amber-500 text-gray-900 text-center p-4 shadow-md sticky top-0 z-50">
+        <h1 class="text-xl font-black"><i class="fa-solid fa-gear"></i> أبو إسلام لقطع غيار التوك توك</h1>
+    </div>
+
+    <!-- الإشعار المنبثق -->
+    <div id="toastMsg" class="toast-notification"><i class="fa-solid fa-check-circle text-green-400"></i> <span id="toastText">تمت الإضافة للسلة</span></div>
+
+    <!-- شاشات الدخول والتحميل -->
+    <div id="loadingScreen" class="screen active p-6 text-center mt-20"><i class="fa-solid fa-spinner fa-spin text-5xl text-amber-500 mb-4"></i><p class="font-bold text-gray-600 text-lg">جاري الاتصال بالمحل...</p></div>
     
-    <div id="loginScreen" class="screen p-6 max-w-md mx-auto mt-4"><div class="bg-white p-6 rounded-xl shadow-lg text-center border-t-4 border-amber-500"><h2 class="text-xl font-bold mb-4 text-gray-800">تسجيل الدخول</h2><input type="tel" id="loginPhone" placeholder="رقم الهاتف (مثال: 010...)" class="w-full mb-4 p-3 border-2 border-gray-300 rounded-lg text-lg text-center font-bold" dir="ltr"><input type="password" id="loginPassword" placeholder="الرقم السري" class="w-full mb-4 p-3 border-2 border-gray-300 rounded-lg text-lg text-center font-bold tracking-widest"><button onclick="loginUser()" id="loginBtn" class="w-full bg-amber-500 text-gray-900 font-bold text-xl py-3 rounded-lg shadow-md mb-4">دخول</button><hr class="mb-4"><button onclick="showRegister()" class="w-full bg-gray-900 text-white font-bold py-2 rounded-lg">إنشاء حساب جديد</button></div></div>
-    <div id="registerScreen" class="screen p-6 max-w-md mx-auto mt-4"><div class="bg-white p-6 rounded-xl shadow-lg text-center border-t-4 border-green-500"><h2 class="text-xl font-bold mb-4 text-gray-800">حساب جديد</h2><input type="tel" id="regPhone" placeholder="رقم الهاتف" class="w-full mb-3 p-3 border rounded text-center font-bold" dir="ltr"><input type="text" id="regName" placeholder="الاسم ثلاثي" class="w-full mb-3 p-3 border rounded text-center font-bold"><input type="text" id="regArea" placeholder="المنطقة / العزبة" class="w-full mb-3 p-3 border rounded text-center font-bold"><input type="password" id="regPassword" placeholder="الرقم السري" class="w-full mb-4 p-3 border rounded text-center font-bold"><button onclick="registerUser()" id="regBtn" class="w-full bg-green-600 text-white font-bold text-xl py-3 rounded-lg shadow-md mb-3">طلب تفعيل</button><button onclick="showLogin()" class="text-gray-500 text-sm font-bold underline">رجوع للدخول</button></div></div>
-    <div id="pendingScreen" class="screen p-6 max-w-md mx-auto mt-10 text-center"><i class="fa-solid fa-clock text-6xl text-amber-500 mb-4"></i><h2 class="text-2xl font-bold text-gray-800 mb-2">طلبك قيد المراجعة</h2><p class="text-gray-600 mb-6">اضغط للتفعيل عبر الواتساب.</p><button onclick="sendWhatsAppAdmin()" class="bg-green-500 text-white font-bold text-lg px-6 py-3 rounded-xl shadow-lg flex items-center justify-center gap-2 mx-auto w-full"><i class="fa-brands fa-whatsapp text-2xl"></i> تفعيل بالواتساب</button></div>
+    <div id="loginScreen" class="screen p-6 max-w-md mx-auto mt-4"><div class="bg-white p-6 rounded-2xl shadow-lg text-center border-t-4 border-amber-500"><h2 class="text-2xl font-black mb-6 text-gray-800">تسجيل الدخول</h2><input type="tel" id="loginPhone" placeholder="رقم الهاتف (مثال: 010...)" class="w-full mb-4 p-4 border-2 border-gray-200 rounded-xl text-lg text-center font-bold focus:border-amber-500 outline-none transition" dir="ltr"><input type="password" id="loginPassword" placeholder="الرقم السري" class="w-full mb-6 p-4 border-2 border-gray-200 rounded-xl text-lg text-center font-bold tracking-widest focus:border-amber-500 outline-none transition"><button onclick="loginUser()" id="loginBtn" class="w-full bg-amber-500 text-gray-900 font-black text-xl py-4 rounded-xl shadow-md hover:bg-amber-400 transition mb-4">دخول للبرنامج</button><hr class="mb-4 border-gray-200"><button onclick="showRegister()" class="w-full bg-gray-900 text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition">إنشاء حساب جديد</button></div></div>
+    
+    <div id="registerScreen" class="screen p-6 max-w-md mx-auto mt-4"><div class="bg-white p-6 rounded-2xl shadow-lg text-center border-t-4 border-green-500"><h2 class="text-2xl font-black mb-6 text-gray-800">حساب جديد</h2><input type="tel" id="regPhone" placeholder="رقم الهاتف" class="w-full mb-3 p-4 border-2 border-gray-200 rounded-xl text-center font-bold outline-none focus:border-green-500 transition" dir="ltr"><input type="text" id="regName" placeholder="الاسم ثلاثي" class="w-full mb-3 p-4 border-2 border-gray-200 rounded-xl text-center font-bold outline-none focus:border-green-500 transition"><input type="text" id="regArea" placeholder="المنطقة / العزبة" class="w-full mb-3 p-4 border-2 border-gray-200 rounded-xl text-center font-bold outline-none focus:border-green-500 transition"><input type="password" id="regPassword" placeholder="الرقم السري" class="w-full mb-6 p-4 border-2 border-gray-200 rounded-xl text-center font-bold outline-none focus:border-green-500 transition"><button onclick="registerUser()" id="regBtn" class="w-full bg-green-600 text-white font-black text-xl py-4 rounded-xl shadow-md hover:bg-green-500 transition mb-4">طلب تفعيل</button><button onclick="showLogin()" class="text-gray-500 text-sm font-bold underline">رجوع للدخول</button></div></div>
+    
+    <div id="pendingScreen" class="screen p-6 max-w-md mx-auto mt-10 text-center"><div class="bg-white p-6 rounded-2xl shadow-lg"><i class="fa-solid fa-clock text-6xl text-amber-500 mb-6"></i><h2 class="text-2xl font-black text-gray-800 mb-2">طلبك قيد المراجعة</h2><p class="text-gray-600 mb-8 font-bold">اضغط للتفعيل عبر الواتساب لتأكيد حسابك.</p><button onclick="sendWhatsAppAdmin()" class="bg-green-500 text-white font-black text-lg px-6 py-4 rounded-xl shadow-lg flex items-center justify-center gap-3 mx-auto w-full hover:bg-green-600 transition"><i class="fa-brands fa-whatsapp text-3xl"></i> تفعيل بالواتساب</button></div></div>
 
     <div id="termsScreen" class="screen p-6 max-w-md mx-auto mt-6">
-        <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-red-600 text-center">
-            <i class="fa-solid fa-gem text-5xl text-amber-500 mb-4"></i>
-            <h2 class="text-2xl font-black mb-4 text-gray-900">أهلاً بيك في الـ VIP</h2>
-            <p class="text-gray-700 font-bold mb-4 bg-gray-50 p-3 rounded border text-sm leading-relaxed">هذا التطبيق مخصص لعملاء "أبو إسلام لقطع غيار التوك توك" المميزين. يوفر لك أسعار حصرية، هدايا، وبونص مستمر.</p>
-            <ul class="text-right text-xs space-y-3 mb-6 font-bold bg-red-50 p-3 rounded border border-red-100">
-                <li class="text-red-800"><i class="fa-solid fa-triangle-exclamation text-red-500"></i> تنبيه 1: نظام الهدايا والبونص مخصص للعملاء (النقدي/الكاش) فقط، ومربوط بعدم وجود أي مديونيات أو حسابات متأخرة على العميل.</li>
-                <li class="text-red-800"><i class="fa-solid fa-triangle-exclamation text-red-500"></i> تنبيه 2: في حالة تسريب الأسعار لجهات أخرى أو افتعال مشاكل مع تجار زملاء، سيتم حظر الحساب فوراً وإلغاء كافة المميزات واعتبارك زبون طياري.</li>
+        <div class="bg-white p-6 rounded-2xl shadow-2xl border-t-4 border-red-600 text-center">
+            <i class="fa-solid fa-gem text-6xl text-amber-500 mb-6"></i>
+            <h2 class="text-3xl font-black mb-4 text-gray-900">أهلاً بيك في الـ VIP</h2>
+            <p class="text-gray-700 font-bold mb-6 bg-gray-50 p-4 rounded-xl border border-gray-200 text-sm leading-relaxed">هذا التطبيق مخصص لعملاء "أبو إسلام لقطع غيار التوك توك" المميزين. يوفر لك أسعار حصرية، هدايا، وبونص مستمر.</p>
+            <ul class="text-right text-xs space-y-4 mb-8 font-bold bg-red-50 p-4 rounded-xl border border-red-200">
+                <li class="text-red-800 flex items-start gap-2"><i class="fa-solid fa-triangle-exclamation text-red-600 mt-1"></i> <span>تنبيه 1: نظام الهدايا والبونص مخصص للعملاء (النقدي/الكاش) فقط، ومربوط بعدم وجود أي مديونيات أو حسابات متأخرة.</span></li>
+                <li class="text-red-800 flex items-start gap-2"><i class="fa-solid fa-triangle-exclamation text-red-600 mt-1"></i> <span>تنبيه 2: في حالة تسريب الأسعار لجهات أخرى أو افتعال مشاكل مع تجار زملاء، سيتم حظر الحساب فوراً وإلغاء الميزات.</span></li>
             </ul>
-            <p class="text-xs text-gray-500 mb-4 font-bold">موافقتك تعني التزامك بهذه الشروط، ونتمنى لك تجارة رابحة معنا!</p>
-            <button onclick="acceptTermsAndEnter()" class="w-full bg-red-600 text-white font-bold text-xl py-3 rounded-lg shadow-md hover:bg-red-700">أوافق على الشروط</button>
+            <button onclick="acceptTermsAndEnter()" class="w-full bg-gradient-to-r from-red-600 to-red-700 text-white font-black text-xl py-4 rounded-xl shadow-lg hover:shadow-xl transition">موافق على الشروط</button>
         </div>
     </div>
 
-    <!-- الرئيسية -->
+    <!-- الشاشة الرئيسية -->
     <div id="homeScreen" class="screen p-4 max-w-md mx-auto mt-4">
-        <h2 class="text-2xl font-bold text-gray-800 mb-4" id="welcomeMsg">أهلاً بك!</h2>
-        <div id="availableBonusContainer" class="bg-green-100 border border-green-500 p-5 rounded-xl text-center mb-6 shadow-sm hidden"><p class="text-green-800 text-lg font-bold mb-2"><i class="fa-solid fa-gift"></i> المكافآت المتاحة للخصم</p><p class="text-4xl font-black text-green-700" id="bonusDisplay">0 <span class="text-xl">جنيه</span></p></div>
-        <div id="pendingBonusContainer" class="bg-purple-100 border border-purple-500 p-4 rounded-xl text-center mb-6 shadow-sm hidden"><p class="text-purple-800 text-lg font-black mb-1">أخبار سارة!</p><p class="text-purple-700 font-bold text-sm">مكافآت في الطريق لحسابك.</p></div>
-        <div class="bg-amber-100 border border-amber-500 p-5 rounded-xl text-center mb-6 shadow-sm"><p class="text-amber-800 text-lg font-bold mb-2"><i class="fa-solid fa-eye"></i> مرات الاستعلام عن الأسعار</p><p class="text-4xl font-black text-amber-700" id="attemptsDisplay">0</p></div>
-        <button onclick="logout()" class="text-red-500 text-sm font-bold underline w-full text-center mt-4">تسجيل الخروج</button>
+        <h2 class="text-3xl font-black text-gray-800 mb-6 border-b pb-2" id="welcomeMsg">أهلاً بك!</h2>
+        
+        <div id="availableBonusContainer" class="bg-gradient-to-br from-green-50 to-green-100 border border-green-400 p-6 rounded-2xl text-center mb-6 shadow-md hidden">
+            <p class="text-green-800 text-lg font-bold mb-2"><i class="fa-solid fa-gift text-2xl"></i> رصيد المكافآت المتاح للخصم</p>
+            <p class="text-5xl font-black text-green-700" id="bonusDisplay">0 <span class="text-xl">جنيه</span></p>
+        </div>
+        
+        <div id="pendingBonusContainer" class="bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-400 p-5 rounded-2xl text-center mb-6 shadow-md hidden">
+            <p class="text-purple-800 text-lg font-black mb-1"><i class="fa-solid fa-face-smile-wink"></i> أخبار سارة!</p>
+            <p class="text-purple-700 font-bold text-sm">مكافآت في الطريق لحسابك.</p>
+        </div>
+        
+        <div class="bg-gradient-to-br from-amber-50 to-amber-100 border border-amber-400 p-6 rounded-2xl text-center mb-8 shadow-md">
+            <p class="text-amber-900 text-lg font-bold mb-2"><i class="fa-solid fa-eye text-2xl"></i> مرات الاستعلام عن الأسعار</p>
+            <p class="text-5xl font-black text-amber-600" id="attemptsDisplay">0</p>
+        </div>
+        
+        <button onclick="logout()" class="text-red-500 bg-red-50 py-3 px-6 rounded-xl text-sm font-bold w-full text-center mt-4 border border-red-100 hover:bg-red-100 transition"><i class="fa-solid fa-arrow-right-from-bracket"></i> تسجيل الخروج</button>
     </div>
 
-    <div id="searchScreen" class="screen p-4 max-w-md mx-auto mt-4 relative"><h2 class="text-xl font-bold text-gray-800 mb-4"><i class="fa-solid fa-search"></i> الاستعلام عن الأسعار</h2><input type="text" id="searchInput" oninput="debouncedSearch()" placeholder="اكتب اسم الصنف للبحث..." class="w-full p-3 border-2 border-amber-500 rounded-lg text-lg focus:outline-none bg-white mb-6"><div id="searchResults" class="space-y-3 pb-32"><p class="text-center text-gray-500 font-bold" id="loadingProductsMsg">جاري جلب الأسعار...</p></div><div id="miniCart"><div class="flex justify-between items-center mb-2"><h3 class="font-bold text-gray-800 text-sm">في طلبك: <span class="bg-red-500 text-white px-2 py-1 rounded-full" id="miniCartCount">0</span></h3><span class="font-black text-green-600 text-lg" id="miniCartTotal">0 ج</span></div><button onclick="switchTab('cartScreen', 'navCart')" class="w-full bg-gray-900 text-white py-2 rounded-lg font-bold text-sm">مراجعة الطلب</button></div></div>
-    <div id="cartScreen" class="screen p-4 max-w-md mx-auto mt-4"><h2 class="text-xl font-bold text-gray-800 mb-4"><i class="fa-solid fa-list-check"></i> تفاصيل طلبك</h2><div id="cartItems" class="space-y-3 mb-6"></div><button onclick="sendOrder()" class="w-full bg-green-600 text-white font-bold text-xl py-4 rounded-xl shadow-md hidden" id="sendOrderBtn">إرسال الطلب للمحل</button></div>
+    <!-- شاشة البحث والسوق -->
+    <div id="searchScreen" class="screen p-4 max-w-md mx-auto mt-4 relative">
+        <h2 class="text-2xl font-black text-gray-800 mb-4"><i class="fa-solid fa-search text-amber-500"></i> الاستعلام عن الأسعار</h2>
+        <div class="relative mb-6">
+            <input type="text" id="searchInput" oninput="debouncedSearch()" placeholder="اكتب اسم الصنف للبحث..." class="w-full p-4 pl-12 border-2 border-amber-500 rounded-xl text-lg font-bold focus:outline-none bg-white shadow-sm transition focus:ring-2 focus:ring-amber-200">
+            <i class="fa-solid fa-magnifying-glass absolute left-4 top-5 text-gray-400 text-xl"></i>
+        </div>
+        
+        <div id="searchResults" class="space-y-3 pb-32">
+            <p class="text-center text-gray-500 font-bold mt-10" id="loadingProductsMsg">جاري جلب الأسعار...</p>
+        </div>
+        
+        <!-- السلة المصغرة -->
+        <div id="miniCart">
+            <div class="flex justify-between items-center mb-3 border-b pb-2">
+                <h3 class="font-bold text-gray-800 text-sm">في طلبك: <span class="bg-red-500 text-white px-2 py-1 rounded-full text-xs" id="miniCartCount">0</span></h3>
+                <span class="font-black text-green-600 text-xl" id="miniCartTotal">0 ج</span>
+            </div>
+            <button onclick="switchTab('cartScreen', 'navCart')" class="w-full bg-gray-900 text-white py-3 rounded-xl font-bold text-base shadow hover:bg-gray-800 transition">مراجعة الطلب <i class="fa-solid fa-arrow-left ml-1"></i></button>
+        </div>
+    </div>
 
+    <!-- شاشة سلة المشتريات الرئيسية -->
+    <div id="cartScreen" class="screen p-4 max-w-md mx-auto mt-4">
+        <h2 class="text-2xl font-black text-gray-800 mb-6 border-b pb-2"><i class="fa-solid fa-cart-shopping text-amber-500"></i> تفاصيل طلبك</h2>
+        
+        <!-- المنتجات هتنزل هنا -->
+        <div id="cartItems" class="space-y-4 mb-6"></div>
+        
+        <button onclick="sendOrder()" class="w-full bg-gradient-to-r from-green-600 to-green-500 text-white font-black text-xl py-4 rounded-xl shadow-lg hover:shadow-xl transition hidden mb-8" id="sendOrderBtn">إرسال الطلب للمحل <i class="fa-solid fa-paper-plane ml-1"></i></button>
+    </div>
+
+    <!-- شاشة متابعة الفواتير -->
     <div id="invoicesScreen" class="screen p-4 max-w-md mx-auto mt-4">
-        <h2 class="text-xl font-bold text-gray-800 mb-4"><i class="fa-solid fa-clock-rotate-left"></i> متابعة المشتريات</h2>
-        <div class="flex border-b-2 border-gray-200 mb-4"><button onclick="showMyInvoices()" class="flex-1 py-2 font-bold text-amber-600 border-b-2 border-amber-600" id="tabInvoices">فواتيري</button><button onclick="showMyOrders()" class="flex-1 py-2 font-bold text-gray-500" id="tabOrders">طلباتي من المحل</button></div>
-        <div id="myInvoicesList" class="space-y-3 pb-20 block"></div>
-        <div id="myOrdersList" class="space-y-3 pb-20 hidden"></div>
+        <h2 class="text-2xl font-black text-gray-800 mb-6"><i class="fa-solid fa-clock-rotate-left text-amber-500"></i> متابعة المشتريات</h2>
+        
+        <div class="flex bg-gray-100 p-1 rounded-xl mb-6">
+            <button onclick="showMyInvoices()" class="flex-1 py-3 font-bold rounded-lg transition bg-white shadow text-amber-600" id="tabInvoices">فواتيري</button>
+            <button onclick="showMyOrders()" class="flex-1 py-3 font-bold rounded-lg transition text-gray-500" id="tabOrders">طلباتي من المحل</button>
+        </div>
+        
+        <div id="myInvoicesList" class="space-y-4 pb-20 block"></div>
+        <div id="myOrdersList" class="space-y-4 pb-20 hidden"></div>
     </div>
 
-    <div id="orderChatModal" class="fixed inset-0 bg-black bg-opacity-80 z-[1003] hidden flex items-center justify-center p-4"><div class="bg-white w-full max-w-md rounded-xl shadow-2xl p-4 flex flex-col h-[80vh]"><div class="flex justify-between items-center mb-4 border-b pb-2"><h2 class="text-lg font-bold text-gray-800"><i class="fa-solid fa-comments text-amber-500"></i> مناقشة الطلب</h2><button onclick="closeOrderChat()" class="text-red-500 font-black text-2xl">&times;</button></div><div id="chatMessagesArea" class="flex-1 overflow-y-auto bg-gray-50 p-2 rounded border mb-2 flex flex-col"></div><div class="flex gap-2"><input type="text" id="chatInput" placeholder="اكتب ردك للمحل..." class="flex-1 p-2 border rounded font-bold"><button onclick="sendOrderChatMessage()" class="bg-amber-500 text-gray-900 px-4 rounded font-bold"><i class="fa-solid fa-paper-plane"></i></button></div></div></div>
+    <!-- شاشة شات الطلب -->
+    <div id="orderChatModal" class="fixed inset-0 bg-black bg-opacity-80 z-[1003] hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl p-5 flex flex-col h-[85vh]">
+            <div class="flex justify-between items-center mb-4 border-b pb-3">
+                <h2 class="text-xl font-black text-gray-800"><i class="fa-solid fa-comments text-amber-500"></i> مناقشة الطلب</h2>
+                <button onclick="closeOrderChat()" class="text-red-500 font-black text-3xl hover:text-red-700 transition">&times;</button>
+            </div>
+            <div id="chatMessagesArea" class="flex-1 overflow-y-auto bg-gray-50 p-3 rounded-xl border border-gray-200 mb-3 flex flex-col space-y-2 shadow-inner"></div>
+            <div class="flex gap-2 bg-white p-1">
+                <input type="text" id="chatInput" placeholder="اكتب ردك للمحل..." class="flex-1 p-3 border-2 border-gray-200 rounded-xl font-bold focus:border-amber-500 outline-none transition">
+                <button onclick="sendOrderChatMessage()" class="bg-amber-500 text-gray-900 w-14 rounded-xl font-bold shadow hover:bg-amber-400 transition"><i class="fa-solid fa-paper-plane text-xl"></i></button>
+            </div>
+        </div>
+    </div>
 
-    <div id="scannerScreen" class="screen p-4 max-w-md mx-auto mt-4 text-center"><h2 class="text-xl font-bold text-gray-800 mb-4"><i class="fa-solid fa-camera"></i> تسجيل فاتورة جديدة</h2><div id="reader" class="w-full rounded-xl overflow-hidden border-4 border-amber-500 bg-black min-h-[300px] mb-4"></div><button onclick="startScanner()" class="bg-amber-500 text-gray-900 font-bold px-6 py-3 rounded-lg shadow-md w-full text-lg">تشغيل الكاميرا</button></div>
+    <!-- الكاميرا -->
+    <div id="scannerScreen" class="screen p-4 max-w-md mx-auto mt-4 text-center">
+        <h2 class="text-2xl font-black text-gray-800 mb-6"><i class="fa-solid fa-camera text-amber-500"></i> تسجيل فاتورة جديدة</h2>
+        <div class="bg-white p-2 rounded-2xl shadow-lg border-2 border-gray-100 mb-6">
+            <div id="reader" class="w-full rounded-xl overflow-hidden bg-black min-h-[300px]"></div>
+        </div>
+        <button onclick="startScanner()" class="bg-amber-500 text-gray-900 font-black px-8 py-4 rounded-xl shadow-lg w-full text-xl hover:bg-amber-400 transition">تشغيل الكاميرا</button>
+    </div>
 
+    <!-- شريط التنقل السفلي -->
     <div class="bottom-nav" id="bottomNav" style="display: none;">
-        <div class="nav-item active" id="navHome" onclick="switchTab('homeScreen', 'navHome')"><i class="fa-solid fa-house"></i><span class="text-xs">الرئيسية</span></div>
-        <div class="nav-item" id="navSearch" onclick="handleSearchTabClick()"><i class="fa-solid fa-tags"></i><span class="text-xs">الأسعار</span></div>
-        <div class="nav-item relative" id="navCart" onclick="switchTab('cartScreen', 'navCart')"><i class="fa-solid fa-cart-shopping"></i><span class="text-xs">طلباتي</span><span id="cartBadge" class="absolute top-0 right-2 bg-red-500 text-white text-xs font-bold w-4 h-4 rounded-full flex items-center justify-center hidden">0</span></div>
-        <div class="nav-item" id="navInvoices" onclick="loadMyRecords(); switchTab('invoicesScreen', 'navInvoices')"><i class="fa-solid fa-receipt"></i><span class="text-xs">متابعة</span></div>
-        <div class="nav-item" id="navScanner" onclick="switchTab('scannerScreen', 'navScanner')"><i class="fa-solid fa-qrcode"></i><span class="text-xs">تسجيل</span></div>
+        <div class="nav-item active" id="navHome" onclick="switchTab('homeScreen', 'navHome')"><i class="fa-solid fa-house"></i><span class="text-[10px]">الرئيسية</span></div>
+        <div class="nav-item" id="navSearch" onclick="handleSearchTabClick()"><i class="fa-solid fa-tags"></i><span class="text-[10px]">الأسعار</span></div>
+        <div class="nav-item relative" id="navCart" onclick="switchTab('cartScreen', 'navCart')"><i class="fa-solid fa-cart-shopping"></i><span class="text-[10px]">طلباتي</span><span id="cartBadge" class="absolute top-1 right-3 bg-red-500 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center hidden shadow">0</span></div>
+        <div class="nav-item" id="navInvoices" onclick="loadMyRecords(); switchTab('invoicesScreen', 'navInvoices')"><i class="fa-solid fa-receipt"></i><span class="text-[10px]">متابعة</span></div>
+        <div class="nav-item" id="navScanner" onclick="switchTab('scannerScreen', 'navScanner')"><i class="fa-solid fa-qrcode"></i><span class="text-[10px]">تسجيل</span></div>
     </div>
 
+    <!-- أكواد Firebase -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, collection, getDocs, doc, getDoc, setDoc, updateDoc, addDoc, query, where, onSnapshot, arrayUnion } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -150,8 +232,8 @@
         window.logout = function() { if(confirm("خروج؟")) { localStorage.removeItem('abuIslamUserPhone'); localStorage.removeItem('abuIslamTermsAccepted'); location.reload(); } }
 
         window.loadProducts = async function() {
-            const cached = localStorage.getItem('abuProducts'); if (cached) { window.dbProducts = JSON.parse(cached); document.getElementById('searchResults').innerHTML = '<p class="text-center text-gray-500 mt-4">تقدر تبحث دلوقتي...</p>'; }
-            try { const q = await getDocs(collection(db, "Products")); let fresh = []; q.forEach(d => fresh.push({ id: d.id, barcode: d.data().Barcode || d.id, name: d.data().Item_Name, price: Number(d.data().Price) })); if(fresh.length > 0) { fresh.sort((a,b) => a.name.localeCompare(b.name, 'ar')); window.dbProducts = fresh; localStorage.setItem('abuProducts', JSON.stringify(fresh)); document.getElementById('searchResults').innerHTML = '<p class="text-center text-gray-500 mt-4">تقدر تبحث دلوقتي...</p>'; } } catch (e) {}
+            const cached = localStorage.getItem('abuProducts'); if (cached) { window.dbProducts = JSON.parse(cached); document.getElementById('searchResults').innerHTML = '<p class="text-center text-gray-500 font-bold mt-10">تقدر تبحث دلوقتي...</p>'; }
+            try { const q = await getDocs(collection(db, "Products")); let fresh = []; q.forEach(d => fresh.push({ id: d.id, barcode: d.data().Barcode || d.id, name: d.data().Item_Name, price: Number(d.data().Price) })); if(fresh.length > 0) { fresh.sort((a,b) => a.name.localeCompare(b.name, 'ar')); window.dbProducts = fresh; localStorage.setItem('abuProducts', JSON.stringify(fresh)); document.getElementById('searchResults').innerHTML = '<p class="text-center text-gray-500 font-bold mt-10">تقدر تبحث دلوقتي...</p>'; } } catch (e) {}
         };
 
         window.updateUserAttempts = async function(newAttempts) { await updateDoc(doc(db, "Users", window.userPhoneId), { attempts: newAttempts }); window.userData.attempts = newAttempts; document.getElementById('attemptsDisplay').innerText = newAttempts; }
@@ -166,8 +248,8 @@
         window.loadMyRecords = function() {
             getDocs(query(collection(db, "ScannedQRs"), where("phone", "==", window.userPhoneId))).then(qSnap => {
                 const list = document.getElementById('myInvoicesList'); list.innerHTML = '';
-                if(qSnap.empty) list.innerHTML = '<p class="text-center text-gray-500">مفيش فواتير مسجلة.</p>';
-                qSnap.forEach(d => { let inv = d.data(); let displayInvoice = inv.originalInvoice || "فاتورة باركود"; let statusHtml = inv.status === 'pending' ? '<span class="text-amber-500 font-bold"><i class="fa-solid fa-clock"></i> قيد المراجعة</span>' : '<span class="text-green-500 font-bold"><i class="fa-solid fa-check"></i> مؤكدة (+5 محاولات)</span>'; let bonusHtml = inv.bonusAmount > 0 ? `<span class="text-green-600 text-xs font-bold block mt-1">بونص: ${inv.bonusAmount} ج (للسحب يوم ${inv.unlockDate})</span>` : ''; list.innerHTML += `<div class="bg-white p-3 rounded-lg shadow border flex justify-between items-center mb-2"><div><span class="font-bold text-gray-800 block">${displayInvoice}</span><span class="text-xs text-gray-400">${inv.date}</span></div><div class="text-left text-sm">${statusHtml}${bonusHtml}</div></div>`; });
+                if(qSnap.empty) list.innerHTML = '<div class="text-center text-gray-400 py-10"><i class="fa-solid fa-receipt text-6xl mb-4"></i><p class="font-bold">مفيش فواتير متسجلة.</p></div>';
+                qSnap.forEach(d => { let inv = d.data(); let displayInvoice = inv.originalInvoice || "فاتورة باركود"; let statusHtml = inv.status === 'pending' ? '<span class="text-amber-500 font-bold"><i class="fa-solid fa-clock"></i> قيد المراجعة</span>' : '<span class="text-green-500 font-bold"><i class="fa-solid fa-check-circle"></i> مؤكدة (+5 محاولات)</span>'; let bonusHtml = inv.bonusAmount > 0 ? `<span class="text-green-700 bg-green-50 px-2 py-1 rounded text-xs font-bold block mt-2 border border-green-200">بونص: ${inv.bonusAmount} ج (للسحب ${inv.unlockDate})</span>` : ''; list.innerHTML += `<div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex justify-between items-center mb-3"><div><span class="font-bold text-gray-800 block text-lg">${displayInvoice}</span><span class="text-xs text-gray-400"><i class="fa-regular fa-calendar"></i> ${inv.date}</span></div><div class="text-left text-sm">${statusHtml}${bonusHtml}</div></div>`; });
             });
 
             onSnapshot(query(collection(db, "Orders"), where("customerId", "==", window.userPhoneId)), (qSnap) => {
@@ -175,13 +257,21 @@
                 window.allMyOrders = []; qSnap.forEach(d => window.allMyOrders.push({ id: d.id, ...d.data() }));
                 window.allMyOrders.sort((a, b) => b.timestamp - a.timestamp);
                 
-                if(window.allMyOrders.length === 0) list.innerHTML = '<p class="text-center text-gray-500">لم تقم بأي طلبات بعد.</p>';
+                if(window.allMyOrders.length === 0) list.innerHTML = '<div class="text-center text-gray-400 py-10"><i class="fa-solid fa-box-open text-6xl mb-4"></i><p class="font-bold">لم تقم بأي طلبات بعد.</p></div>';
                 window.allMyOrders.forEach(o => {
                     let stColor = o.status === 'قيد التجهيز' ? 'text-blue-500' : (o.status === 'تأكيد وإغلاق' ? 'text-green-500' : 'text-amber-500');
                     let msgCount = o.chat ? o.chat.length : 0;
-                    list.innerHTML += `<div class="bg-white p-3 rounded-lg shadow border mb-3"><div class="flex justify-between items-center mb-2"><span class="text-xs text-gray-400">${o.date}</span><span class="font-bold ${stColor}">${o.status}</span></div><div class="flex justify-between items-center"><span class="font-bold text-gray-800">الإجمالي: <span class="text-green-600">${o.totalAmount} ج</span></span><button onclick="openOrderChat('${o.id}')" class="bg-gray-100 border text-gray-700 px-3 py-1 rounded text-xs font-bold shadow-sm"><i class="fa-solid fa-comments text-amber-500"></i> مناقشة الطلب (${msgCount})</button></div></div>`;
+                    list.innerHTML += `
+                        <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 mb-3">
+                            <div class="flex justify-between items-center border-b pb-2 mb-3"><span class="text-xs text-gray-400"><i class="fa-regular fa-clock"></i> ${o.date}</span><span class="font-black bg-gray-50 px-2 py-1 rounded ${stColor}">${o.status}</span></div>
+                            <div class="flex justify-between items-center">
+                                <span class="font-bold text-gray-600 text-sm">الإجمالي: <span class="font-black text-green-600 text-lg">${o.totalAmount} ج</span></span>
+                                <button onclick="openOrderChat('${o.id}')" class="bg-blue-50 hover:bg-blue-100 transition border border-blue-200 text-blue-700 px-4 py-2 rounded-lg text-xs font-bold shadow-sm"><i class="fa-solid fa-comments"></i> شات المحل (${msgCount})</button>
+                            </div>
+                        </div>
+                    `;
                 });
-                if (window.currentChatOrderId) renderChatMessages(); 
+                if (window.currentChatOrderId) renderChatMessages(); // الشات اللحظي
             });
         }
 
@@ -192,8 +282,8 @@
             if(!window.currentChatOrderId) return;
             const order = window.allMyOrders.find(o => o.id === window.currentChatOrderId);
             const area = document.getElementById('chatMessagesArea'); area.innerHTML = '';
-            if(!order || !order.chat || order.chat.length === 0) { area.innerHTML = '<p class="text-center text-gray-400 font-bold mt-10">استفسر عن طلبك من هنا.</p>'; return; }
-            order.chat.forEach(msg => { let cssClass = msg.sender === 'client' ? 'chat-bubble-client' : 'chat-bubble-admin'; let senderName = msg.sender === 'client' ? 'أنت' : 'المحل'; area.innerHTML += `<div class="${cssClass}"><span class="text-[10px] text-gray-500 block mb-1">${senderName} - ${msg.time}</span><p class="text-sm font-bold">${msg.text}</p></div>`; });
+            if(!order || !order.chat || order.chat.length === 0) { area.innerHTML = '<div class="text-center text-gray-400 py-10"><i class="fa-regular fa-comments text-5xl mb-3"></i><p class="font-bold">استفسر عن طلبك من الإدارة هنا.</p></div>'; return; }
+            order.chat.forEach(msg => { let cssClass = msg.sender === 'client' ? 'chat-bubble-client' : 'chat-bubble-admin'; let senderName = msg.sender === 'client' ? 'أنت' : 'المحل'; area.innerHTML += `<div class="${cssClass}"><span class="text-[10px] text-gray-500 block mb-1">${senderName} - ${msg.time}</span><p class="text-sm font-bold text-gray-800">${msg.text}</p></div>`; });
             area.scrollTop = area.scrollHeight;
         }
         window.sendOrderChatMessage = async function() {
@@ -203,86 +293,117 @@
             await updateDoc(doc(db, "Orders", window.currentChatOrderId), { chat: arrayUnion(msgObj) }); input.value = '';
         }
 
-        window.showMyInvoices = function() { document.getElementById('tabInvoices').classList.add('text-amber-600', 'border-amber-600'); document.getElementById('tabOrders').classList.remove('text-amber-600', 'border-amber-600'); document.getElementById('tabInvoices').classList.remove('text-gray-500'); document.getElementById('tabOrders').classList.add('text-gray-500'); document.getElementById('myInvoicesList').classList.remove('hidden'); document.getElementById('myOrdersList').classList.add('hidden'); }
-        window.showMyOrders = function() { document.getElementById('tabOrders').classList.add('text-amber-600', 'border-amber-600'); document.getElementById('tabInvoices').classList.remove('text-amber-600', 'border-amber-600'); document.getElementById('tabOrders').classList.remove('text-gray-500'); document.getElementById('tabInvoices').classList.add('text-gray-500'); document.getElementById('myOrdersList').classList.remove('hidden'); document.getElementById('myInvoicesList').classList.add('hidden'); }
+        window.showMyInvoices = function() { document.getElementById('tabInvoices').classList.add('bg-white', 'text-amber-600', 'shadow'); document.getElementById('tabOrders').classList.remove('bg-white', 'text-amber-600', 'shadow'); document.getElementById('tabInvoices').classList.remove('text-gray-500'); document.getElementById('tabOrders').classList.add('text-gray-500'); document.getElementById('myInvoicesList').classList.remove('hidden'); document.getElementById('myOrdersList').classList.add('hidden'); }
+        window.showMyOrders = function() { document.getElementById('tabOrders').classList.add('bg-white', 'text-amber-600', 'shadow'); document.getElementById('tabInvoices').classList.remove('bg-white', 'text-amber-600', 'shadow'); document.getElementById('tabOrders').classList.remove('text-gray-500'); document.getElementById('tabInvoices').classList.add('text-gray-500'); document.getElementById('myOrdersList').classList.remove('hidden'); document.getElementById('myInvoicesList').classList.add('hidden'); }
     </script>
-
     <script>
-        // دالة الصوت العالمية والمحسنة لمنع الحظر
+        // إعداد الصوت العالمي
         let audioCtx = null;
+        function initAudio() { if (!audioCtx) { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } if (audioCtx.state === 'suspended') { audioCtx.resume(); } }
+        // تشغيل الصوت لأول مرة عند أي لمسة عشان المتصفح يفك الحظر
+        document.addEventListener('click', initAudio, { once: true });
+        document.addEventListener('touchstart', initAudio, { once: true });
+
         window.playBeep = function() {
             try {
-                if (!audioCtx) {
-                    const AudioContext = window.AudioContext || window.webkitAudioContext;
-                    audioCtx = new AudioContext();
-                }
-                if (audioCtx.state === 'suspended') audioCtx.resume();
-                
+                initAudio();
                 const osc = audioCtx.createOscillator();
-                const gainNode = audioCtx.createGain();
+                const gain = audioCtx.createGain();
                 osc.type = 'sine';
                 osc.frequency.setValueAtTime(800, audioCtx.currentTime);
-                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
-                osc.connect(gainNode);
-                gainNode.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.1);
-            } catch(e) {}
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+            } catch(e) { console.log(e); }
+        }
+
+        // إشعار الإضافة للسلة (Toast)
+        window.showToast = function(msg) {
+            const toast = document.getElementById('toastMsg');
+            document.getElementById('toastText').innerText = msg;
+            toast.classList.add('show');
+            setTimeout(() => { toast.classList.remove('show'); }, 1500);
         }
 
         let cart = []; let html5QrcodeScanner; let isMarketUnlocked = false; 
-        function handleSearchTabClick() { if (isMarketUnlocked) switchTab('searchScreen', 'navSearch'); else { if (window.userData && window.userData.attempts > 0) { if (confirm(`خصم استعلام جديد؟\nمعاك ${window.userData.attempts} استعلام.`)) { window.updateUserAttempts(window.userData.attempts - 1); isMarketUnlocked = true; switchTab('searchScreen', 'navSearch'); displayProducts(window.dbProducts.slice(0, 30)); } } else alert("رصيد الاستعلام خلص! صور فاتورة."); } }
+        function handleSearchTabClick() { if (isMarketUnlocked) switchTab('searchScreen', 'navSearch'); else { if (window.userData && window.userData.attempts > 0) { if (confirm(`خصم استعلام جديد؟\nمعاك ${window.userData.attempts} استعلام.`)) { window.updateUserAttempts(window.userData.attempts - 1); isMarketUnlocked = true; switchTab('searchScreen', 'navSearch'); displayProducts(window.dbProducts.slice(0, 30)); } } else alert("رصيد الاستعلام خلص! صور فاتورة مشتريات."); } }
         function switchTab(sId, nId) { document.querySelectorAll('.screen').forEach(el => el.classList.remove('active')); document.getElementById(sId).classList.add('active'); document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active')); document.getElementById(nId).classList.add('active'); if(sId !== 'scannerScreen' && html5QrcodeScanner) { try { html5QrcodeScanner.clear(); } catch(e){} } if(sId === 'cartScreen') updateCart(); }
         let cTimeout; window.debouncedSearch = function() { clearTimeout(cTimeout); cTimeout = setTimeout(() => { searchP(); }, 300); }
         function searchP() { const q = document.getElementById('searchInput').value.trim().toLowerCase(); if(q === '') { displayProducts(window.dbProducts.slice(0, 30)); return; } displayProducts(window.dbProducts.filter(p => p.name && p.name.toLowerCase().includes(q) || (p.barcode && p.barcode.toLowerCase().includes(q))).slice(0, 50)); }
-        function displayProducts(arr) { const div = document.getElementById('searchResults'); div.innerHTML = ''; if(!arr || arr.length === 0) { div.innerHTML = '<p class="text-center font-bold text-red-500 mt-4">مش لاقيين الصنف.</p>'; return; } arr.forEach(p => { div.innerHTML += `<div class="bg-white p-4 rounded-lg shadow border flex justify-between items-center mb-2"><div><span class="font-bold text-gray-800 text-lg block">${p.name}</span><span class="text-green-600 font-black text-xl">${p.price} ج</span></div><button onclick="addToCart('${p.id}')" class="bg-amber-500 font-bold px-4 py-2 rounded-lg"><i class="fa-solid fa-plus"></i> إضافة</button></div>`; }); }
+        
+        function displayProducts(arr) { 
+            const div = document.getElementById('searchResults'); div.innerHTML = ''; 
+            if(!arr || arr.length === 0) { div.innerHTML = '<p class="text-center font-bold text-red-500 mt-10"><i class="fa-solid fa-triangle-exclamation text-3xl mb-2"></i><br>مش لاقيين الصنف.</p>'; return; } 
+            arr.forEach(p => { 
+                div.innerHTML += `
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex justify-between items-center mb-3 hover:shadow-md transition">
+                    <div><span class="font-bold text-gray-800 text-lg block">${p.name}</span><span class="text-green-600 font-black text-xl">${p.price} ج</span></div>
+                    <button onclick="addToCart('${p.id}')" class="bg-amber-500 hover:bg-amber-400 font-bold px-5 py-3 rounded-xl shadow transition text-gray-900"><i class="fa-solid fa-cart-plus"></i></button>
+                </div>`; 
+            }); 
+        }
         
         function addToCart(id) { 
             const p = window.dbProducts.find(x => x.id === id); const ex = cart.find(x => x.id === id); 
             if (ex) ex.qty += 1; else cart.push({ id: p.id, barcode: p.barcode, name: p.name, price: p.price, qty: 1 }); 
             
             updateCartUI(); 
-            window.playBeep(); // تشغيل الصوت بنجاح
+            window.playBeep(); // الصوت المحسن
+            window.showToast(`تم إضافة ${p.name}`); // الإشعار الشيك
             
-            event.currentTarget.innerHTML = '<i class="fa-solid fa-check"></i> تمت'; event.currentTarget.classList.add('bg-green-500', 'text-white');
-            setTimeout(() => { event.currentTarget.innerHTML = '<i class="fa-solid fa-plus"></i> إضافة'; event.currentTarget.classList.remove('bg-green-500', 'text-white'); }, 500); 
+            const btn = event.currentTarget;
+            btn.innerHTML = '<i class="fa-solid fa-check"></i>'; btn.classList.add('bg-green-500', 'text-white');
+            setTimeout(() => { btn.innerHTML = '<i class="fa-solid fa-cart-plus"></i>'; btn.classList.remove('bg-green-500', 'text-white'); }, 400); 
         }
 
-        function updateCartUI() { let q = 0, t = 0; cart.forEach(i => { q += i.qty; t += i.price * i.qty; }); const badge = document.getElementById('cartBadge'), mini = document.getElementById('miniCart'), mItems = document.getElementById('miniCartItems'); if (q > 0) { badge.innerText = q; badge.classList.remove('hidden'); mini.style.display = 'block'; document.getElementById('miniCartCount').innerText = q; document.getElementById('miniCartTotal').innerText = `${t} ج`; mItems.innerHTML = ''; cart.forEach(i => mItems.innerHTML += `<div class="flex justify-between border-b pb-1 text-sm"><span class="font-bold">${i.name}</span> <span class="font-black text-green-700">${i.qty}</span></div>`); } else { badge.classList.add('hidden'); mini.style.display = 'none'; } updateCart(); }
+        function updateCartUI() { 
+            let q = 0, t = 0; cart.forEach(i => { q += i.qty; t += i.price * i.qty; }); 
+            const badge = document.getElementById('cartBadge'), mini = document.getElementById('miniCart'); 
+            if (q > 0) { 
+                badge.innerText = q; badge.classList.remove('hidden'); mini.style.display = 'block'; 
+                document.getElementById('miniCartCount').innerText = q; document.getElementById('miniCartTotal').innerText = `${t} ج`; 
+            } else { 
+                badge.classList.add('hidden'); mini.style.display = 'none'; 
+            } 
+            updateCart(); // التحديث اللحظي للسلة
+        }
         
         function updateCart() { 
             const div = document.getElementById('cartItems'), btn = document.getElementById('sendOrderBtn'); div.innerHTML = ''; let t = 0; 
-            if(cart.length === 0) { div.innerHTML = '<p class="text-center font-bold">السلة فاضية.</p>'; btn.classList.add('hidden'); return; } 
+            if(cart.length === 0) { 
+                div.innerHTML = '<div class="text-center text-gray-400 py-10"><i class="fa-solid fa-cart-arrow-down text-6xl mb-4"></i><p class="font-bold text-lg">سلة طلباتك فارغة</p></div>'; 
+                btn.classList.add('hidden'); return; 
+            } 
             btn.classList.remove('hidden'); 
             cart.forEach((i, idx) => { 
                 t += i.price * i.qty; 
-                div.innerHTML += `<div class="bg-white p-3 rounded-lg shadow border mb-2"><div class="flex justify-between items-center mb-3"><span class="font-bold text-lg">${i.name}</span><span class="text-green-600 font-black text-xl">${i.price * i.qty} ج</span></div><div class="flex justify-between items-center"><button onclick="removeFromCart(${idx})" class="text-red-500 bg-red-100 px-3 py-2 rounded-lg text-sm font-bold">مسح</button><div class="flex items-center gap-4 bg-gray-100 p-1 border rounded"><button onclick="changeQty(${idx}, 1)" class="bg-gray-300 px-3 rounded font-black">+</button><span class="font-black text-lg w-6 text-center">${i.qty}</span><button onclick="changeQty(${idx}, -1)" class="bg-gray-300 px-3 rounded font-black">-</button></div></div></div>`; 
+                div.innerHTML += `
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 mb-3 transition-all duration-300">
+                    <div class="flex justify-between items-center mb-4"><span class="font-bold text-lg text-gray-800">${i.name}</span><span class="text-green-600 font-black text-xl">${i.price * i.qty} ج</span></div>
+                    <div class="flex justify-between items-center">
+                        <button onclick="removeFromCart(${idx})" class="text-red-500 bg-red-50 hover:bg-red-100 px-4 py-2 rounded-lg text-sm font-bold transition"><i class="fa-solid fa-trash"></i> مسح</button>
+                        <div class="flex items-center gap-3 bg-gray-50 p-1 border border-gray-200 rounded-lg">
+                            <button onclick="changeQty(${idx}, 1)" class="bg-white shadow-sm text-green-600 w-8 h-8 rounded-md font-black text-xl flex justify-center items-center">+</button>
+                            <span class="font-black text-lg w-6 text-center text-gray-800">${i.qty}</span>
+                            <button onclick="changeQty(${idx}, -1)" class="bg-white shadow-sm text-red-600 w-8 h-8 rounded-md font-black text-xl flex justify-center items-center">-</button>
+                        </div>
+                    </div>
+                </div>`; 
             }); 
-            div.innerHTML += `<div class="bg-gray-900 text-white p-4 rounded-lg flex justify-between mt-4"><span class="font-bold">الإجمالي:</span><span class="font-black text-2xl text-amber-500">${t} ج</span></div>`; 
+            div.innerHTML += `<div class="bg-gradient-to-r from-gray-900 to-gray-800 text-white p-5 rounded-xl flex justify-between mt-6 shadow-lg"><span class="font-bold text-lg">الإجمالي المطلوب:</span><span class="font-black text-3xl text-amber-400">${t} ج</span></div>`; 
         }
 
-        // التعديل لحل مشكلة اختفاء السلة وتهنيج الزرار
+        // دالة التعديل المحمية من التهنيج
         window.changeQty = function(i, c) { 
             if(!cart[i]) return;
-            if(cart[i].qty === 1 && c === -1) { 
-                if(!confirm("حذف الصنف من الفاتورة؟")) return; 
-                cart.splice(i, 1);
-            } else {
-                cart[i].qty += c; 
-            }
+            if(cart[i].qty === 1 && c === -1) { if(!confirm("هل تريد حذف الصنف من الفاتورة؟")) return; cart.splice(i, 1); } 
+            else { cart[i].qty += c; } 
             updateCartUI(); 
         }
-        
-        window.removeFromCart = function(i) { 
-            if(!cart[i]) return;
-            if(confirm("هل تريد مسح هذا الصنف بالكامل؟")) {
-                cart.splice(i, 1); 
-                updateCartUI(); 
-            }
-        }
+        window.removeFromCart = function(i) { if(!cart[i]) return; if(confirm("هل تريد مسح هذا الصنف بالكامل؟")) { cart.splice(i, 1); updateCartUI(); } }
 
-        window.sendOrder = async function() { if(!confirm("إرسال الطلب؟")) return; let t = 0; cart.forEach(i => t += i.price * i.qty); const btn = document.getElementById('sendOrderBtn'); btn.innerHTML = "جاري الإرسال..."; btn.disabled = true; const s = await window.submitOrderToDB({ items: cart, totalAmount: t, date: new Date().toLocaleString("ar-EG"), timestamp: new Date().getTime(), status: "في انتظار التأكيد" }); if(s) { alert("تم الإرسال بنجاح!"); cart = []; updateCartUI(); isMarketUnlocked = false; loadMyRecords(); switchTab('invoicesScreen', 'navInvoices'); } else alert("خطأ."); btn.innerHTML = `إرسال للمحل`; btn.disabled = false; }
-        window.startScanner = function() { if(html5QrcodeScanner) { try { html5QrcodeScanner.clear(); } catch(e){} } html5QrcodeScanner = new Html5Qrcode("reader"); html5QrcodeScanner.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 250, height: 250 } }, async (text) => { html5QrcodeScanner.clear(); document.getElementById('reader').innerHTML = '<p class="text-green-500 font-bold p-10">جاري التسجيل...</p>'; const n = await window.verifyAndSaveQR(text); if (n) { alert(`تم التسجيل في انتظار التأكيد!`); loadMyRecords(); switchTab('invoicesScreen', 'navInvoices'); } else switchTab('homeScreen', 'navHome'); }).catch(e => alert("افتح الكاميرا.")); }
+        window.sendOrder = async function() { if(!confirm("تأكيد وإرسال الطلب للمحل؟")) return; let t = 0; cart.forEach(i => t += i.price * i.qty); const btn = document.getElementById('sendOrderBtn'); btn.innerHTML = "جاري الإرسال <i class='fa-solid fa-spinner fa-spin ml-2'></i>"; btn.disabled = true; const s = await window.submitOrderToDB({ items: cart, totalAmount: t, date: new Date().toLocaleString("ar-EG"), timestamp: new Date().getTime(), status: "في انتظار التأكيد" }); if(s) { alert("تم الإرسال بنجاح! المحل هيجهز طلبك."); cart = []; updateCartUI(); isMarketUnlocked = false; loadMyRecords(); switchTab('invoicesScreen', 'navInvoices'); } else alert("حدث خطأ في الإرسال."); btn.innerHTML = `إرسال الطلب للمحل <i class="fa-solid fa-paper-plane ml-1"></i>`; btn.disabled = false; }
+        window.startScanner = function() { if(html5QrcodeScanner) { try { html5QrcodeScanner.clear(); } catch(e){} } html5QrcodeScanner = new Html5Qrcode("reader"); html5QrcodeScanner.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 250, height: 250 } }, async (text) => { html5QrcodeScanner.clear(); document.getElementById('reader').innerHTML = '<div class="flex flex-col items-center justify-center h-full p-10"><i class="fa-solid fa-qrcode text-5xl text-green-500 mb-4 animate-bounce"></i><p class="text-green-500 font-bold text-lg">تم اللقط، جاري التسجيل...</p></div>'; const n = await window.verifyAndSaveQR(text); if (n) { alert(`تم التسجيل! في انتظار تأكيد الإدارة لإضافة المحاولات.`); loadMyRecords(); switchTab('invoicesScreen', 'navInvoices'); } else switchTab('homeScreen', 'navHome'); }).catch(e => alert("يرجى إعطاء صلاحية الكاميرا للمتصفح.")); }
     </script>
 </body>
 </html>
