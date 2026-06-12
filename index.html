@@ -22,17 +22,28 @@
 <body>
 
     <div class="bg-amber-500 text-gray-900 text-center p-4 shadow-md sticky top-0 z-50"><h1 class="text-xl font-black"><i class="fa-solid fa-gear"></i> أبو إسلام لقطع غيار التوك توك</h1></div>
-
     <div id="loadingScreen" class="screen active p-6 text-center mt-20"><i class="fa-solid fa-spinner fa-spin text-5xl text-amber-500 mb-4"></i><p class="font-bold text-gray-600">جاري الاتصال بالمحل...</p></div>
     
     <div id="loginScreen" class="screen p-6 max-w-md mx-auto mt-4"><div class="bg-white p-6 rounded-xl shadow-lg text-center border-t-4 border-amber-500"><h2 class="text-xl font-bold mb-4 text-gray-800">تسجيل الدخول</h2><input type="tel" id="loginPhone" placeholder="رقم الهاتف (مثال: 010...)" class="w-full mb-4 p-3 border-2 border-gray-300 rounded-lg text-lg text-center font-bold" dir="ltr"><input type="password" id="loginPassword" placeholder="الرقم السري" class="w-full mb-4 p-3 border-2 border-gray-300 rounded-lg text-lg text-center font-bold tracking-widest"><button onclick="loginUser()" id="loginBtn" class="w-full bg-amber-500 text-gray-900 font-bold text-xl py-3 rounded-lg shadow-md mb-4">دخول</button><hr class="mb-4"><button onclick="showRegister()" class="w-full bg-gray-900 text-white font-bold py-2 rounded-lg">إنشاء حساب جديد</button></div></div>
-    
-    <div id="registerScreen" class="screen p-6 max-w-md mx-auto mt-4"><div class="bg-white p-6 rounded-xl shadow-lg text-center border-t-4 border-green-500"><h2 class="text-xl font-bold mb-4 text-gray-800">حساب جديد</h2><input type="tel" id="regPhone" placeholder="رقم الهاتف (يُفضل عليه واتس)" class="w-full mb-3 p-3 border rounded text-center font-bold" dir="ltr"><input type="text" id="regName" placeholder="الاسم ثلاثي" class="w-full mb-3 p-3 border rounded text-center font-bold"><input type="text" id="regArea" placeholder="المنطقة / العزبة" class="w-full mb-3 p-3 border rounded text-center font-bold"><input type="password" id="regPassword" placeholder="الرقم السري" class="w-full mb-4 p-3 border rounded text-center font-bold"><button onclick="registerUser()" id="regBtn" class="w-full bg-green-600 text-white font-bold text-xl py-3 rounded-lg shadow-md mb-3">طلب تفعيل</button><button onclick="showLogin()" class="text-gray-500 text-sm font-bold underline">رجوع</button></div></div>
-    
-    <div id="pendingScreen" class="screen p-6 max-w-md mx-auto mt-10 text-center"><i class="fa-solid fa-clock text-6xl text-amber-500 mb-4"></i><h2 class="text-2xl font-bold text-gray-800 mb-2">طلبك قيد المراجعة</h2><p class="text-gray-600 mb-6">اضغط للتفعيل عبر الواتساب.</p><button onclick="sendWhatsAppAdmin()" class="bg-green-500 text-white font-bold text-lg px-6 py-3 rounded-xl shadow-lg flex items-center justify-center gap-2 mx-auto w-full"><i class="fa-brands fa-whatsapp text-2xl"></i> تفعيل بالواتساب</button><button onclick="logout()" class="text-red-500 text-sm font-bold underline mt-6 block w-full">خروج</button></div>
+    <div id="registerScreen" class="screen p-6 max-w-md mx-auto mt-4"><div class="bg-white p-6 rounded-xl shadow-lg text-center border-t-4 border-green-500"><h2 class="text-xl font-bold mb-4 text-gray-800">حساب جديد</h2><input type="tel" id="regPhone" placeholder="رقم الهاتف" class="w-full mb-3 p-3 border rounded text-center font-bold" dir="ltr"><input type="text" id="regName" placeholder="الاسم ثلاثي" class="w-full mb-3 p-3 border rounded text-center font-bold"><input type="text" id="regArea" placeholder="المنطقة" class="w-full mb-3 p-3 border rounded text-center font-bold"><input type="password" id="regPassword" placeholder="الرقم السري" class="w-full mb-4 p-3 border rounded text-center font-bold"><button onclick="registerUser()" id="regBtn" class="w-full bg-green-600 text-white font-bold text-xl py-3 rounded-lg shadow-md mb-3">طلب تفعيل</button><button onclick="showLogin()" class="text-gray-500 text-sm font-bold underline">رجوع للدخول</button></div></div>
+    <div id="pendingScreen" class="screen p-6 max-w-md mx-auto mt-10 text-center"><i class="fa-solid fa-clock text-6xl text-amber-500 mb-4"></i><h2 class="text-2xl font-bold text-gray-800 mb-2">طلبك قيد المراجعة</h2><p class="text-gray-600 mb-6">اضغط للتفعيل عبر الواتساب.</p><button onclick="sendWhatsAppAdmin()" class="bg-green-500 text-white font-bold text-lg px-6 py-3 rounded-xl shadow-lg flex items-center justify-center gap-2 mx-auto w-full"><i class="fa-brands fa-whatsapp text-2xl"></i> تفعيل بالواتساب</button></div>
 
-    <div id="termsScreen" class="screen p-6 max-w-md mx-auto mt-6"><div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-red-600 text-center"><i class="fa-solid fa-gem text-5xl text-red-600 mb-4"></i><h2 class="text-2xl font-black mb-4 text-gray-900">أهلاً بيك في الـ VIP</h2><p class="text-gray-700 font-bold mb-4 bg-gray-50 p-3 rounded border">هذا التطبيق خاص بعملاء المحل المميزين.</p><ul class="text-right text-sm space-y-3 mb-6 font-bold"><li class="text-green-700"><i class="fa-solid fa-check text-green-500"></i> ميزة معرفة الأسعار.</li><li class="text-green-700"><i class="fa-solid fa-check text-green-500"></i> هدايا وبونص.</li><li class="text-red-600 mt-4 pt-4 border-t"><i class="fa-solid fa-triangle-exclamation text-red-500"></i> تحذير: في حالة تسريب الأسعار أو المشاكل، يتم حظرك من التطبيق.</li></ul><button onclick="acceptTermsAndEnter()" class="w-full bg-red-600 text-white font-bold text-xl py-3 rounded-lg shadow-md hover:bg-red-700">موافق على الشروط</button></div></div>
+    <!-- رسالة الـ VIP (نص كامل ومحترم) -->
+    <div id="termsScreen" class="screen p-6 max-w-md mx-auto mt-6">
+        <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-red-600 text-center">
+            <i class="fa-solid fa-gem text-5xl text-amber-500 mb-4"></i>
+            <h2 class="text-2xl font-black mb-4 text-gray-900">أهلاً بيك في الـ VIP</h2>
+            <p class="text-gray-700 font-bold mb-4 bg-gray-50 p-3 rounded border text-sm leading-relaxed">هذا التطبيق مخصص لعملاء "أبو إسلام لقطع غيار التوك توك" المميزين. يوفر لك أسعار حصرية، هدايا، وبونص مستمر.</p>
+            <ul class="text-right text-xs space-y-3 mb-6 font-bold bg-red-50 p-3 rounded border border-red-100">
+                <li class="text-red-800"><i class="fa-solid fa-triangle-exclamation text-red-500"></i> تنبيه 1: نظام الهدايا والبونص مخصص للعملاء (النقدي/الكاش) فقط، ومربوط بعدم وجود أي مديونيات أو حسابات متأخرة على العميل.</li>
+                <li class="text-red-800"><i class="fa-solid fa-triangle-exclamation text-red-500"></i> تنبيه 2: في حالة تسريب الأسعار لجهات أخرى أو افتعال مشاكل مع تجار زملاء، سيتم حظر الحساب فوراً وإلغاء كافة المميزات واعتبارك زبون طياري.</li>
+            </ul>
+            <p class="text-xs text-gray-500 mb-4 font-bold">موافقتك تعني التزامك بهذه الشروط، ونتمنى لك تجارة رابحة معنا!</p>
+            <button onclick="acceptTermsAndEnter()" class="w-full bg-red-600 text-white font-bold text-xl py-3 rounded-lg shadow-md hover:bg-red-700">أوافق على الشروط</button>
+        </div>
+    </div>
 
+    <!-- الرئيسية -->
     <div id="homeScreen" class="screen p-4 max-w-md mx-auto mt-4">
         <h2 class="text-2xl font-bold text-gray-800 mb-4" id="welcomeMsg">أهلاً بك!</h2>
         <div id="availableBonusContainer" class="bg-green-100 border border-green-500 p-5 rounded-xl text-center mb-6 shadow-sm hidden"><p class="text-green-800 text-lg font-bold mb-2"><i class="fa-solid fa-gift"></i> المكافآت المتاحة للخصم</p><p class="text-4xl font-black text-green-700" id="bonusDisplay">0 <span class="text-xl">جنيه</span></p></div>
@@ -51,7 +62,14 @@
         <div id="myOrdersList" class="space-y-3 pb-20 hidden"></div>
     </div>
 
-    <div id="orderChatModal" class="fixed inset-0 bg-black bg-opacity-80 z-[1003] hidden flex items-center justify-center p-4"><div class="bg-white w-full max-w-md rounded-xl shadow-2xl p-4 flex flex-col h-[80vh]"><div class="flex justify-between items-center mb-4 border-b pb-2"><h2 class="text-lg font-bold text-gray-800"><i class="fa-solid fa-comments text-amber-500"></i> مناقشة الطلب</h2><button onclick="closeOrderChat()" class="text-red-500 font-black text-2xl">&times;</button></div><div id="chatMessagesArea" class="flex-1 overflow-y-auto bg-gray-50 p-2 rounded border mb-2 flex flex-col"></div><div class="flex gap-2"><input type="text" id="chatInput" placeholder="اكتب ردك للمحل..." class="flex-1 p-2 border rounded font-bold"><button onclick="sendOrderChatMessage()" class="bg-amber-500 text-gray-900 px-4 rounded font-bold"><i class="fa-solid fa-paper-plane"></i></button></div></div></div>
+    <!-- شاشة شات الفاتورة -->
+    <div id="orderChatModal" class="fixed inset-0 bg-black bg-opacity-80 z-[1003] hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-xl shadow-2xl p-4 flex flex-col h-[80vh]">
+            <div class="flex justify-between items-center mb-4 border-b pb-2"><h2 class="text-lg font-bold text-gray-800"><i class="fa-solid fa-comments text-amber-500"></i> مناقشة الطلب</h2><button onclick="closeOrderChat()" class="text-red-500 font-black text-2xl">&times;</button></div>
+            <div id="chatMessagesArea" class="flex-1 overflow-y-auto bg-gray-50 p-2 rounded border mb-2 flex flex-col"></div>
+            <div class="flex gap-2"><input type="text" id="chatInput" placeholder="اكتب ردك للمحل..." class="flex-1 p-2 border rounded font-bold"><button onclick="sendOrderChatMessage()" class="bg-amber-500 text-gray-900 px-4 rounded font-bold"><i class="fa-solid fa-paper-plane"></i></button></div>
+        </div>
+    </div>
 
     <div id="scannerScreen" class="screen p-4 max-w-md mx-auto mt-4 text-center"><h2 class="text-xl font-bold text-gray-800 mb-4"><i class="fa-solid fa-camera"></i> تسجيل فاتورة جديدة</h2><div id="reader" class="w-full rounded-xl overflow-hidden border-4 border-amber-500 bg-black min-h-[300px] mb-4"></div><button onclick="startScanner()" class="bg-amber-500 text-gray-900 font-bold px-6 py-3 rounded-lg shadow-md w-full text-lg">تشغيل الكاميرا</button></div>
 
@@ -63,12 +81,14 @@
         <div class="nav-item" id="navScanner" onclick="switchTab('scannerScreen', 'navScanner')"><i class="fa-solid fa-qrcode"></i><span class="text-xs">تسجيل</span></div>
     </div>
 
+     <!-- Firebase Script -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, collection, getDocs, doc, getDoc, setDoc, updateDoc, addDoc, query, where, onSnapshot, arrayUnion } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = { apiKey: "AIzaSyA5OY4oagUmG8WaWpqFWYzzEvMxQkf2j3c", authDomain: "abu-islam-auto.firebaseapp.com", projectId: "abu-islam-auto", storageBucket: "abu-islam-auto.firebasestorage.app", messagingSenderId: "914603263591", appId: "1:914603263591:web:f5e283f0e0fbec3259f6c2" };
-        const app = initializeApp(firebaseConfig); const db = getFirestore(app);
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
         window.dbProducts = []; window.userData = null; window.availableBonus = 0; window.allMyOrders = [];
         window.userPhoneId = localStorage.getItem('abuIslamUserPhone');
@@ -87,15 +107,17 @@
                         else { enterApp(); }
                     }
                 } else { localStorage.removeItem('abuIslamUserPhone'); document.querySelectorAll('.screen').forEach(el => el.classList.remove('active')); document.getElementById('loginScreen').classList.add('active'); }
-            } catch (error) { alert("خطأ اتصال."); }
+            } catch (error) {}
         }
 
         window.acceptTermsAndEnter = function() { localStorage.setItem('abuIslamTermsAccepted', 'true'); enterApp(); }
+
         async function enterApp() {
             document.getElementById('welcomeMsg').innerText = `أهلاً بك يا ${window.userData.name}!`;
             document.getElementById('attemptsDisplay').innerText = window.userData.attempts;
             await calculateDynamicBonus();
-            document.querySelectorAll('.screen').forEach(el => el.classList.remove('active')); document.getElementById('homeScreen').classList.add('active'); document.getElementById('bottomNav').style.display = 'flex'; loadProducts(); 
+            document.querySelectorAll('.screen').forEach(el => el.classList.remove('active')); document.getElementById('homeScreen').classList.add('active'); document.getElementById('bottomNav').style.display = 'flex';
+            loadProducts(); 
         }
 
         async function calculateDynamicBonus() {
@@ -107,6 +129,7 @@
                 const avCont = document.getElementById('availableBonusContainer'), penCont = document.getElementById('pendingBonusContainer');
                 if (window.availableBonus > 0) { avCont.classList.remove('hidden'); document.getElementById('bonusDisplay').innerHTML = `${window.availableBonus} <span class="text-xl">جنيه</span>`; } else avCont.classList.add('hidden');
                 if (hasPending) penCont.classList.remove('hidden'); else penCont.classList.add('hidden');
+                await updateDoc(doc(db, "Users", window.userPhoneId), { bonus: window.availableBonus });
             } catch(e) {}
         }
 
@@ -119,7 +142,7 @@
             if (phone.startsWith('0')) phone = phone.substring(1); phone = '+20' + phone;
             const btn = document.getElementById('regBtn'); btn.disabled = true;
             const checkDoc = await getDoc(doc(db, "Users", phone));
-            if (checkDoc.exists()) { alert("الرقم مسجل!"); btn.disabled = false; return; }
+            if (checkDoc.exists()) { alert("الرقم مسجل! قم بالدخول."); btn.disabled = false; return; }
             await setDoc(doc(db, "Users", phone), { phone: phone, name: name, area: area, password: password, type: 'retail', attempts: 10, bonus: 0, deductedBonus: 0, status: 'pending', createdAt: new Date() });
             await fetchUserData(phone);
         }
@@ -136,7 +159,7 @@
         window.logout = function() { if(confirm("خروج؟")) { localStorage.removeItem('abuIslamUserPhone'); localStorage.removeItem('abuIslamTermsAccepted'); location.reload(); } }
 
         window.loadProducts = async function() {
-            const cached = localStorage.getItem('abuProducts'); if (cached) { window.dbProducts = JSON.parse(cached); document.getElementById('searchResults').innerHTML = '<p class="text-center text-gray-500 mt-4">تقدر تبحث دلوقتي...</p>'; }
+            const cached = localStorage.getItem('abuProducts'); if (cached) { window.dbProducts = JSON.parse(cached); }
             try { const q = await getDocs(collection(db, "Products")); let fresh = []; q.forEach(d => fresh.push({ id: d.id, barcode: d.data().Barcode || d.id, name: d.data().Item_Name, price: Number(d.data().Price) })); if(fresh.length > 0) { fresh.sort((a,b) => a.name.localeCompare(b.name, 'ar')); window.dbProducts = fresh; localStorage.setItem('abuProducts', JSON.stringify(fresh)); document.getElementById('searchResults').innerHTML = '<p class="text-center text-gray-500 mt-4">تقدر تبحث دلوقتي...</p>'; } } catch (e) {}
         };
 
@@ -161,12 +184,13 @@
                 window.allMyOrders = []; qSnap.forEach(d => window.allMyOrders.push({ id: d.id, ...d.data() }));
                 window.allMyOrders.sort((a, b) => b.timestamp - a.timestamp);
                 
-                if(window.allMyOrders.length === 0) list.innerHTML = '<p class="text-center text-gray-500">لا توجد طلبات.</p>';
+                if(window.allMyOrders.length === 0) list.innerHTML = '<p class="text-center text-gray-500">لم تقم بأي طلبات بعد.</p>';
                 window.allMyOrders.forEach(o => {
                     let stColor = o.status === 'قيد التجهيز' ? 'text-blue-500' : (o.status === 'تأكيد وإغلاق' ? 'text-green-500' : 'text-amber-500');
                     let msgCount = o.chat ? o.chat.length : 0;
                     list.innerHTML += `<div class="bg-white p-3 rounded-lg shadow border mb-3"><div class="flex justify-between items-center mb-2"><span class="text-xs text-gray-400">${o.date}</span><span class="font-bold ${stColor}">${o.status}</span></div><div class="flex justify-between items-center"><span class="font-bold text-gray-800">الإجمالي: <span class="text-green-600">${o.totalAmount} ج</span></span><button onclick="openOrderChat('${o.id}')" class="bg-gray-100 border text-gray-700 px-3 py-1 rounded text-xs font-bold shadow-sm"><i class="fa-solid fa-comments text-amber-500"></i> مناقشة الطلب (${msgCount})</button></div></div>`;
                 });
+                if (window.currentChatOrderId) renderChatMessages(); // الشات اللحظي
             });
         }
 
@@ -192,10 +216,7 @@
         window.showMyOrders = function() { document.getElementById('tabOrders').classList.add('text-amber-600', 'border-amber-600'); document.getElementById('tabInvoices').classList.remove('text-amber-600', 'border-amber-600'); document.getElementById('tabOrders').classList.remove('text-gray-500'); document.getElementById('tabInvoices').classList.add('text-gray-500'); document.getElementById('myOrdersList').classList.remove('hidden'); document.getElementById('myInvoicesList').classList.add('hidden'); }
     </script>
     <script>
-        // دالة تشغيل صوت الصفارة
-        window.playBeep = function() {
-            try { const AudioContext = window.AudioContext || window.webkitAudioContext; const ctx = new AudioContext(); const osc = ctx.createOscillator(); const gainNode = ctx.createGain(); osc.type = 'sine'; osc.frequency.setValueAtTime(800, ctx.currentTime); gainNode.gain.setValueAtTime(0.1, ctx.currentTime); osc.connect(gainNode); gainNode.connect(ctx.destination); osc.start(); osc.stop(ctx.currentTime + 0.1); } catch(e) {}
-        }
+        window.playBeep = function() { try { const AudioContext = window.AudioContext || window.webkitAudioContext; const ctx = new AudioContext(); const osc = ctx.createOscillator(); const gainNode = ctx.createGain(); osc.type = 'sine'; osc.frequency.setValueAtTime(800, ctx.currentTime); gainNode.gain.setValueAtTime(0.1, ctx.currentTime); osc.connect(gainNode); gainNode.connect(ctx.destination); osc.start(); osc.stop(ctx.currentTime + 0.1); } catch(e) {} }
 
         let cart = []; let html5QrcodeScanner; let isMarketUnlocked = false; 
         function handleSearchTabClick() { if (isMarketUnlocked) switchTab('searchScreen', 'navSearch'); else { if (window.userData && window.userData.attempts > 0) { if (confirm(`خصم استعلام جديد؟\nمعاك ${window.userData.attempts} استعلام.`)) { window.updateUserAttempts(window.userData.attempts - 1); isMarketUnlocked = true; switchTab('searchScreen', 'navSearch'); displayProducts(window.dbProducts.slice(0, 30)); } } else alert("رصيد الاستعلام خلص! صور فاتورة."); } }
@@ -207,17 +228,31 @@
         function addToCart(id) { 
             const p = window.dbProducts.find(x => x.id === id); const ex = cart.find(x => x.id === id); 
             if (ex) ex.qty += 1; else cart.push({ id: p.id, barcode: p.barcode, name: p.name, price: p.price, qty: 1 }); 
-            updateCartUI(); 
-            window.playBeep(); // الصوت هنا
-            event.currentTarget.innerHTML = '<i class="fa-solid fa-check"></i> تمت'; 
-            event.currentTarget.classList.add('bg-green-500', 'text-white');
+            updateCartUI(); window.playBeep();
+            event.currentTarget.innerHTML = '<i class="fa-solid fa-check"></i> تمت'; event.currentTarget.classList.add('bg-green-500', 'text-white');
             setTimeout(() => { event.currentTarget.innerHTML = '<i class="fa-solid fa-plus"></i> إضافة'; event.currentTarget.classList.remove('bg-green-500', 'text-white'); }, 500); 
         }
 
         function updateCartUI() { let q = 0, t = 0; cart.forEach(i => { q += i.qty; t += i.price * i.qty; }); const badge = document.getElementById('cartBadge'), mini = document.getElementById('miniCart'), mItems = document.getElementById('miniCartItems'); if (q > 0) { badge.innerText = q; badge.classList.remove('hidden'); mini.style.display = 'block'; document.getElementById('miniCartCount').innerText = q; document.getElementById('miniCartTotal').innerText = `${t} ج`; mItems.innerHTML = ''; cart.forEach(i => mItems.innerHTML += `<div class="flex justify-between border-b pb-1 text-sm"><span class="font-bold">${i.name}</span> <span class="font-black text-green-700">${i.qty}</span></div>`); } else { badge.classList.add('hidden'); mini.style.display = 'none'; } updateCart(); }
-        function updateCart() { const div = document.getElementById('cartItems'), btn = document.getElementById('sendOrderBtn'); div.innerHTML = ''; let t = 0; if(cart.length === 0) { div.innerHTML = '<p class="text-center font-bold">السلة فاضية.</p>'; btn.classList.add('hidden'); return; } btn.classList.remove('hidden'); cart.forEach((i, idx) => { t += i.price * i.qty; div.innerHTML += `<div class="bg-white p-3 rounded-lg shadow border mb-2"><div class="flex justify-between items-center mb-3"><span class="font-bold text-lg">${i.name}</span><span class="text-green-600 font-black text-xl">${i.price * i.qty} ج</span></div><div class="flex justify-between items-center"><button onclick="removeFromCart(${idx})" class="text-red-500 bg-red-100 px-3 py-2 rounded-lg text-sm font-bold">مسح</button><div class="flex items-center gap-4 bg-gray-100 p-1 border rounded"><button onclick="changeQty(${idx}, 1)" class="bg-gray-300 px-3 rounded font-black">+</button><span class="font-black text-lg w-6 text-center">${i.qty}</span><button onclick="changeQty(${idx}, -1)" class="bg-gray-300 px-3 rounded font-black">-</button></div></div></div>`; }); div.innerHTML += `<div class="bg-gray-900 text-white p-4 rounded-lg flex justify-between mt-4"><span class="font-bold">الإجمالي:</span><span class="font-black text-2xl text-amber-500">${t} ج</span></div>`; }
-        window.changeQty = function(i, c) { cart[i].qty += c; if (cart[i].qty <= 0) cart.splice(i, 1); updateCartUI(); }
+        
+        function updateCart() { 
+            const div = document.getElementById('cartItems'), btn = document.getElementById('sendOrderBtn'); div.innerHTML = ''; let t = 0; 
+            if(cart.length === 0) { div.innerHTML = '<p class="text-center font-bold">السلة فاضية.</p>'; btn.classList.add('hidden'); return; } 
+            btn.classList.remove('hidden'); 
+            cart.forEach((i, idx) => { 
+                t += i.price * i.qty; 
+                div.innerHTML += `<div class="bg-white p-3 rounded-lg shadow border mb-2"><div class="flex justify-between items-center mb-3"><span class="font-bold text-lg">${i.name}</span><span class="text-green-600 font-black text-xl">${i.price * i.qty} ج</span></div><div class="flex justify-between items-center"><button onclick="removeFromCart(${idx})" class="text-red-500 bg-red-100 px-3 py-2 rounded-lg text-sm font-bold">مسح</button><div class="flex items-center gap-4 bg-gray-100 p-1 border rounded"><button onclick="changeQty(${idx}, 1)" class="bg-gray-300 px-3 rounded font-black">+</button><span class="font-black text-lg w-6 text-center">${i.qty}</span><button onclick="changeQty(${idx}, -1)" class="bg-gray-300 px-3 rounded font-black">-</button></div></div></div>`; 
+            }); 
+            div.innerHTML += `<div class="bg-gray-900 text-white p-4 rounded-lg flex justify-between mt-4"><span class="font-bold">الإجمالي:</span><span class="font-black text-2xl text-amber-500">${t} ج</span></div>`; 
+        }
+
+        // التعديل: تحذير المسح
+      window.changeQty = function(i, c) { 
+            if(cart[i].qty === 1 && c === -1) { if(!confirm("حذف الصنف من الفاتورة؟")) return; }
+            cart[i].qty += c; if (cart[i].qty <= 0) cart.splice(i, 1); updateCartUI(); 
+        }
         window.removeFromCart = function(i) { cart.splice(i, 1); updateCartUI(); }
+
         window.sendOrder = async function() { if(!confirm("إرسال الطلب؟")) return; let t = 0; cart.forEach(i => t += i.price * i.qty); const btn = document.getElementById('sendOrderBtn'); btn.innerHTML = "جاري الإرسال..."; btn.disabled = true; const s = await window.submitOrderToDB({ items: cart, totalAmount: t, date: new Date().toLocaleString("ar-EG"), timestamp: new Date().getTime(), status: "في انتظار التأكيد" }); if(s) { alert("تم الإرسال بنجاح!"); cart = []; updateCartUI(); isMarketUnlocked = false; loadMyRecords(); switchTab('invoicesScreen', 'navInvoices'); } else alert("خطأ."); btn.innerHTML = `إرسال للمحل`; btn.disabled = false; }
         window.startScanner = function() { if(html5QrcodeScanner) { try { html5QrcodeScanner.clear(); } catch(e){} } html5QrcodeScanner = new Html5Qrcode("reader"); html5QrcodeScanner.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 250, height: 250 } }, async (text) => { html5QrcodeScanner.clear(); document.getElementById('reader').innerHTML = '<p class="text-green-500 font-bold p-10">جاري التسجيل...</p>'; const n = await window.verifyAndSaveQR(text); if (n) { alert(`تم التسجيل في انتظار التأكيد!`); loadMyRecords(); switchTab('invoicesScreen', 'navInvoices'); } else switchTab('homeScreen', 'navHome'); }).catch(e => alert("افتح الكاميرا.")); }
     </script>
